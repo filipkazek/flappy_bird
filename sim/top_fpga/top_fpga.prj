@@ -19,3 +19,8 @@ sv work ../../rtl/vga_pkg.sv \
 
 # compile glbl module - required for IP simulation
 verilog work ../common/glbl.v
+ verilog work       ../../fpga/rtl/clk_wiz_0_clk_wiz.v 
+  verilog work      ../../fpga/rtl/clk_wiz_0.v 
+
+
+nosort

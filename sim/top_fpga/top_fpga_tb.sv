@@ -29,7 +29,7 @@ module top_fpga_tb;
      *  Local parameters
      */
 
-    localparam CLK_PERIOD = 10;     // 100 MHz
+    localparam real CLK_PERIOD = 10;     // 100 MHz
 
 
     /**
