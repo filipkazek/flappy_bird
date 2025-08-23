@@ -19,7 +19,7 @@
      *  Local parameters
      */
 
-    localparam CLK_PERIOD = 25;     // 40 MHz
+    localparam real CLK_PERIOD = 15.3846;     // 40 MHz
 
 
     /**

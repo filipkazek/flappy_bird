@@ -20,71 +20,49 @@ module top_vga (
         output logic hs,
         output logic [3:0] r,
         output logic [3:0] g,
-        output logic [3:0] b
+        output logic [3:0] b,
+        inout logic ps2_clk,
+        inout logic ps2_data
     );
 
     timeunit 1ns;
     timeprecision 1ps;
 
-    /**
-     * Local variables and signals
-     */
-
-    // VGA signals from timing
-    wire [10:0] vcount_tim, hcount_tim;
-    wire vsync_tim, hsync_tim;
-    wire vblnk_tim, hblnk_tim;
-
-    // VGA signals from background
-    wire [10:0] vcount_bg, hcount_bg;
-    wire vsync_bg, hsync_bg;
-    wire vblnk_bg, hblnk_bg;
-    wire [11:0] rgb_bg;
 
 
-    /**
-     * Signals assignments
-     */
-
-    assign vs = vsync_bg;
-    assign hs = hsync_bg;
-    assign {r,g,b} = rgb_bg;
 
 
-    /**
-     * Submodules instances
-     */
+
+    assign vs = u_draw_out_if.vsync;
+    assign hs = u_draw_out_if.hsync;
+    assign {r,g,b} = u_draw_out_if.rgb;
+
+    vga_if u_timing_draw_if();
+    vga_if u_draw_out_if();
 
     vga_timing u_vga_timing (
         .clk,
         .rst,
-        .vcount (vcount_tim),
-        .vsync  (vsync_tim),
-        .vblnk  (vblnk_tim),
-        .hcount (hcount_tim),
-        .hsync  (hsync_tim),
-        .hblnk  (hblnk_tim)
+        .vout(u_timing_draw_if)
+    );
+
+    wire logic left;
+
+        MouseCtl u_mouse_ctl (
+        .clk(clk100MHz),
+        .rst(rst),
+        .ps2_clk(ps2_clk),
+        .ps2_data(ps2_data),
+        .left(left)
     );
 
     draw_bg u_draw_bg (
         .clk,
         .rst,
-
-        .vcount_in  (vcount_tim),
-        .vsync_in   (vsync_tim),
-        .vblnk_in   (vblnk_tim),
-        .hcount_in  (hcount_tim),
-        .hsync_in   (hsync_tim),
-        .hblnk_in   (hblnk_tim),
-
-        .vcount_out (vcount_bg),
-        .vsync_out  (vsync_bg),
-        .vblnk_out  (vblnk_bg),
-        .hcount_out (hcount_bg),
-        .hsync_out  (hsync_bg),
-        .hblnk_out  (hblnk_bg),
-
-        .rgb_out    (rgb_bg)
+        .left(left),
+        .vin(u_timing_draw_if),
+        .vout(u_draw_out_if)
     );
+
 
 endmodule

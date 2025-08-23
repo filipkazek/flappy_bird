@@ -37,6 +37,7 @@ set sv_files {
     ../rtl/vga_timing.sv
     ../rtl/draw_bg.sv
     ../rtl/top_vga.sv
+    ../rtl/vga_if.sv
     rtl/top_vga_basys3.sv
 }
 
@@ -47,9 +48,10 @@ set sv_files {
  }
 
 # Specify VHDL design files location            -- EDIT
-# set vhdl_files {
-#    path/to/file.vhd
-# }
+ set vhdl_files {
+../fpga/rtl/MouseCtl.vhd
+../fpga/rtl/Ps2Interface.vhd
+ }
 
 # Specify files for a memory initialization     -- EDIT
 # set mem_files {

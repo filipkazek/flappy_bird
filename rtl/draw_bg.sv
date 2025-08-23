@@ -10,22 +10,9 @@
 module draw_bg (
         input  logic clk,
         input  logic rst,
-
-        input  logic [10:0] vcount_in,
-        input  logic        vsync_in,
-        input  logic        vblnk_in,
-        input  logic [10:0] hcount_in,
-        input  logic        hsync_in,
-        input  logic        hblnk_in,
-
-        output logic [10:0] vcount_out,
-        output logic        vsync_out,
-        output logic        vblnk_out,
-        output logic [10:0] hcount_out,
-        output logic        hsync_out,
-        output logic        hblnk_out,
-
-        output logic [11:0] rgb_out
+        input logic left,
+        vga_if.in vin,
+        vga_if.out vout
     );
 
     timeunit 1ns;
@@ -45,54 +32,37 @@ module draw_bg (
      * Internal logic
      */
 
+
     always_ff @(posedge clk) begin : bg_ff_blk
         if (rst) begin
-            vcount_out <= '0;
-            vsync_out  <= '0;
-            vblnk_out  <= '0;
-            hcount_out <= '0;
-            hsync_out  <= '0;
-            hblnk_out  <= '0;
-            rgb_out    <= '0;
+            vout.vcount <= '0;
+            vout.vsync  <= '0;
+            vout.vblnk <= '0;
+            vout.hcount <= '0;
+            vout.hsync <= '0;
+            vout.hblnk  <= '0;
+            vout.rgb    <= '0;
         end else begin
-            vcount_out <= vcount_in;
-            vsync_out  <= vsync_in;
-            vblnk_out  <= vblnk_in;
-            hcount_out <= hcount_in;
-            hsync_out  <= hsync_in;
-            hblnk_out  <= hblnk_in;
-            rgb_out    <= rgb_nxt;
+            vout.vcount <= vin.vcount;
+            vout.vsync <= vin.vsync;
+            vout.vblnk <= vin.vblnk;
+            vout.hcount <= vin.hcount;
+            vout.hsync <= vin.hsync;
+            vout.hblnk <= vin.hblnk;
+            vout.rgb   <= rgb_nxt;
         end
     end
 
     always_comb begin : bg_comb_blk
-        if (vblnk_in || hblnk_in) begin             // Blanking region:
+        
+        if (vin.vblnk || vin.hblnk) begin             // Blanking region:
             rgb_nxt = 12'h0_0_0;                    // - make it it black.
-        end else begin                              // Active region:
-            if (vcount_in == 0)                     // - top edge:
-                rgb_nxt = 12'hf_f_0;                // - - make a yellow line.
-            else if (vcount_in == VER_PIXELS - 1)   // - bottom edge:
-                rgb_nxt = 12'hf_0_0;                // - - make a red line.
-            else if (hcount_in == 0)                // - left edge:
-                rgb_nxt = 12'h0_f_0;                // - - make a green line.
-            else if (hcount_in == HOR_PIXELS - 1)   // - right edge:
-                rgb_nxt = 12'h0_0_f;                // - - make a blue line.
-
-           else if((hcount_in >= 100 && hcount_in < 150 && vcount_in >= 100 && vcount_in < 300) || 
-           (hcount_in >= 100 && hcount_in < 200 && vcount_in >= 100 && vcount_in < 150) || 
-         (hcount_in >= 100 && hcount_in < 170 && vcount_in >= 200 && vcount_in < 250))  
-      begin
-           rgb_nxt = 12'hF_F_0; 
-        end  else if  ((hcount_in >= 450 && hcount_in <= 500 && vcount_in >= 100 && vcount_in < 300) ||
-       (hcount_in >= 500 && hcount_in <= 550 && vcount_in >= 175 && vcount_in < 225) ||
-       (hcount_in >= 550 && hcount_in <= 600 && vcount_in >= 100 && vcount_in < 175) ||
-        (hcount_in >= 550 && hcount_in <= 600 && vcount_in >= 225 && vcount_in < 300))  
-    begin
-      rgb_nxt = 12'hF_F_0; 
-    end           
-            else                                    // The rest of active display pixels:
-                rgb_nxt = 12'h8_8_8;                // - fill with gray.
+        end else if (left) begin                              // Active region:
+            rgb_nxt = 12'hF_0_0;                // - fill with gray.
+            end else begin
+                rgb_nxt = 12'h0_F_F;                // - fill with white.
         end
     end
+
 
 endmodule
