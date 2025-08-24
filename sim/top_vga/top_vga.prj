@@ -19,6 +19,7 @@ sv work ../../rtl/vga_pkg.sv \
         ../../rtl/game_fsm.sv \
         ../../rtl/menu_mux.sv \
         ../../rtl/draw_game.sv \
+        ../../rtl/bird_jump.sv \
         ../../rtl/draw_gameover.sv \
         ../common/tiff_writer.sv \
         top_vga_tb.sv

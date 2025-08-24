@@ -45,14 +45,18 @@ module top_vga (
 
     wire logic left;
     wire logic right;
+    wire logic new_event;
         MouseCtl u_mouse_ctl (
         .clk(clk100MHz),
         .rst(rst),
         .ps2_clk(ps2_clk),
         .ps2_data(ps2_data),
         .left(left),
-        .right(right)
+        .right(right),
+        .new_event(new_event)
     );
+
+    wire mouse_left_event = left & new_event;
 
     draw_bg u_draw_bg (
         .clk,
@@ -63,7 +67,7 @@ module top_vga (
 
     wire logic [1:0] state;
     rgb_if u_modules_mux_if();
-   
+    wire logic game_rst;
     menu_mux u_menu_mux
     (
         .clk,
@@ -77,9 +81,10 @@ module top_vga (
     (
         .clk,
         .rst,
-        .mouse_left(left),
+        .mouse_left(mouse_left_event),
         .collision(right),
-        .state(state)
+        .state(state),
+        .game_rst(game_rst)
     );
 
     draw_start u_draw_start
@@ -97,7 +102,9 @@ module top_vga (
         .rst,
         .vin(u_timing_draw_if),
         .rgb(u_modules_mux_if.rgb_game),
-        .valid(u_modules_mux_if.valid_game)
+        .valid(u_modules_mux_if.valid_game),
+        .mouse_left(mouse_left_event),
+        .game_rst(game_rst)
     );
         
         draw_gameover u_draw_gameover
@@ -108,5 +115,6 @@ module top_vga (
         .rgb(u_modules_mux_if.rgb_gameover),
         .valid(u_modules_mux_if.valid_gameover)
     );
+
 
 endmodule

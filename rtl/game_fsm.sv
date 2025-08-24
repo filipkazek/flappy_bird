@@ -1,31 +1,32 @@
 module game_fsm
 (
-    input  wire  clk,        // posedge active clock
-    input  wire  rst,        // high-level active synchronous reset
-    input  wire  mouse_left, // left mouse click
-    input  wire  collision,  // collision signal
-    output logic [1:0] state // encoded FSM state for outside world
+    input  wire  clk,         // posedge active clock
+    input  wire  rst,         // high-level active synchronous reset
+    input  wire  mouse_left,  // left mouse click
+    input  wire  collision,   // collision signal
+    output logic [1:0] state, // encoded FSM state for outside world
+    output logic       game_rst // synchronous reset for game logic
 );
 
 //------------------------------------------------------------------------------
 // local parameters
 //------------------------------------------------------------------------------
-localparam STATE_BITS = 2; // number of bits used for state register
+localparam STATE_BITS = 2; // liczba bitów do reprezentacji stanu
 
 //------------------------------------------------------------------------------
-// local variables
+// lokalne zmienne
 //------------------------------------------------------------------------------
-enum logic [STATE_BITS-1 :0] {
-    START    = 2'b00, 
+enum logic [STATE_BITS-1:0] {
+    START    = 2'b00,
     GAME     = 2'b01,
     GAMEOVER = 2'b10
 } current_state;
 
 //------------------------------------------------------------------------------
-// edge detector for mouse_left
+// detektor zbocza dla mouse_left
 //------------------------------------------------------------------------------
-logic mouse_left_d;
-logic mouse_left_pulse;
+logic mouse_left_d;        // poprzedni stan przycisku
+logic mouse_left_pulse;    // pojedynczy impuls
 
 always_ff @(posedge clk) begin
     if (rst)
@@ -34,19 +35,21 @@ always_ff @(posedge clk) begin
         mouse_left_d <= mouse_left;
 end
 
-assign mouse_left_pulse = mouse_left & ~mouse_left_d; // tylko zbocze narastające
+assign mouse_left_pulse = mouse_left & ~mouse_left_d;
 
 //------------------------------------------------------------------------------
-// FSM sequential with synchronous reset
+// FSM sekwencyjny z synchronicznym resetem
 //------------------------------------------------------------------------------
-always_ff @(posedge clk) begin : seq_blk
+always_ff @(posedge clk) begin
     if (rst) begin
         current_state <= START;
         state <= START;
+        game_rst <= 1'b0;
     end
     else begin
         case (current_state)
             START: begin
+                game_rst <= 1'b0; // reset gry w stanie START
                 if (mouse_left_pulse) begin
                     current_state <= GAME;
                     state <= GAME;
@@ -58,6 +61,7 @@ always_ff @(posedge clk) begin : seq_blk
             end
 
             GAME: begin
+                game_rst <= 1'b0; // reset gry nieaktywny w trakcie gry
                 if (collision) begin
                     current_state <= GAMEOVER;
                     state <= GAMEOVER;
@@ -69,6 +73,7 @@ always_ff @(posedge clk) begin : seq_blk
             end
 
             GAMEOVER: begin
+                game_rst <= 1'b1; // aktywujemy reset gry
                 if (mouse_left_pulse) begin
                     current_state <= START;
                     state <= START;
@@ -82,6 +87,7 @@ always_ff @(posedge clk) begin : seq_blk
             default: begin
                 current_state <= START;
                 state <= START;
+                game_rst <= 1'b0;
             end
         endcase
     end
