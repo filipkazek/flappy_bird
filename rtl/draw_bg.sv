@@ -57,10 +57,13 @@ module draw_bg (
         
         if (vin.vblnk || vin.hblnk) begin             // Blanking region:
             rgb_nxt = 12'h0_0_0;                    // - make it it black.
-        end else if (left) begin                              // Active region:
-            rgb_nxt = 12'hF_0_0;                // - fill with gray.
-            end else begin
-                rgb_nxt = 12'h0_F_F;                // - fill with white.
+        end else if (vin.vcount > 700) begin                              // Active region:
+            rgb_nxt = 12'hA52;                // - fill with gray.
+            end else if (vin.vcount <= 700 && vin.vcount > 675 ) begin                              // Active region:
+            rgb_nxt = 12'h0F0;                // - fill with gray.
+            end
+            else begin
+                rgb_nxt = 12'h5_5_F;                // - fill with white.
         end
     end
 

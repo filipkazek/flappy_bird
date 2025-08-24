@@ -28,14 +28,11 @@ module top_vga (
     timeunit 1ns;
     timeprecision 1ps;
 
-
-
-
-
+     wire logic [11:0] rgb_out;
 
     assign vs = u_draw_out_if.vsync;
     assign hs = u_draw_out_if.hsync;
-    assign {r,g,b} = u_draw_out_if.rgb;
+    assign {r,g,b} = rgb_out;
 
     vga_if u_timing_draw_if();
     vga_if u_draw_out_if();
@@ -47,13 +44,14 @@ module top_vga (
     );
 
     wire logic left;
-
+    wire logic right;
         MouseCtl u_mouse_ctl (
         .clk(clk100MHz),
         .rst(rst),
         .ps2_clk(ps2_clk),
         .ps2_data(ps2_data),
-        .left(left)
+        .left(left),
+        .right(right)
     );
 
     draw_bg u_draw_bg (
@@ -64,5 +62,33 @@ module top_vga (
         .vout(u_draw_out_if)
     );
 
+    wire logic [1:0] state;
+    rgb_if u_modules_mux_if();
+   
+    menu_mux u_menu_mux
+    (
+        .state(state),
+        .rgb_bg(u_draw_out_if.rgb),
+        .vin(u_modules_mux_if),
+        .rgb_out(rgb_out)
+    );
+
+    game_fsm u_game_fsm
+    (
+        .clk,
+        .rst,
+        .mouse_left(left),
+        .collision(right),
+        .state(state)
+    );
+
+    draw_start u_draw_start
+    (
+        .clk,
+        .rst,
+        .vin(u_timing_draw_if),
+        .rgb(u_modules_mux_if.rgb_start),
+        .valid(u_modules_mux_if.valid_start)
+    );
 
 endmodule
