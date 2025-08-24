@@ -57,7 +57,6 @@ module top_vga (
     draw_bg u_draw_bg (
         .clk,
         .rst,
-        .left(left),
         .vin(u_timing_draw_if),
         .vout(u_draw_out_if)
     );
@@ -67,6 +66,7 @@ module top_vga (
    
     menu_mux u_menu_mux
     (
+        .clk,
         .state(state),
         .rgb_bg(u_draw_out_if.rgb),
         .vin(u_modules_mux_if),
@@ -89,6 +89,24 @@ module top_vga (
         .vin(u_timing_draw_if),
         .rgb(u_modules_mux_if.rgb_start),
         .valid(u_modules_mux_if.valid_start)
+    );
+
+        draw_game u_draw_game
+    (
+        .clk,
+        .rst,
+        .vin(u_timing_draw_if),
+        .rgb(u_modules_mux_if.rgb_game),
+        .valid(u_modules_mux_if.valid_game)
+    );
+        
+        draw_gameover u_draw_gameover
+    (
+        .clk,
+        .rst,
+        .vin(u_timing_draw_if),
+        .rgb(u_modules_mux_if.rgb_gameover),
+        .valid(u_modules_mux_if.valid_gameover)
     );
 
 endmodule

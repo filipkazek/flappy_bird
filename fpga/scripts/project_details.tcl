@@ -38,6 +38,12 @@ set sv_files {
     ../rtl/draw_bg.sv
     ../rtl/top_vga.sv
     ../rtl/vga_if.sv
+    ../rtl/draw_game.sv
+    ../rtl/draw_gameover.sv
+    ../rtl/draw_start.sv
+    ../rtl/game_fsm.sv
+    ../rtl/menu_mux.sv
+    ../rtl/rgb_if.sv
     rtl/top_vga_basys3.sv
 }
 

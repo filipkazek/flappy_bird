@@ -13,7 +13,11 @@ sv work ../../rtl/vga_pkg.sv \
         ../../rtl/vga_timing.sv \
         ../../rtl/draw_bg.sv \
         ../../rtl/top_vga.sv \
-        ../../fpga/rtl/top_vga_basys3.sv \
+        ../../rtl/vga_if.sv \
+        ../../rtl/rgb_if.sv \
+        ../../rtl/draw_start.sv \
+        ../../rtl/game_fsm.sv \
+        ../../rtl/menu_mux.sv \
         ../common/tiff_writer.sv \
         top_fpga_tb.sv
 

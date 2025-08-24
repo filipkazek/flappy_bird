@@ -10,7 +10,6 @@
 module draw_bg (
         input  logic clk,
         input  logic rst,
-        input logic left,
         vga_if.in vin,
         vga_if.out vout
     );
