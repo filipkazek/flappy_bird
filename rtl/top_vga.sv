@@ -45,6 +45,7 @@ module top_vga (
 
     wire logic left;
     wire logic right;
+    wire logic collision;
     wire logic new_event;
         MouseCtl u_mouse_ctl (
         .clk(clk100MHz),
@@ -56,7 +57,16 @@ module top_vga (
         .new_event(new_event)
     );
 
-    wire mouse_left_event = left & new_event;
+   // wire mouse_left_event = left & new_event;
+    logic left_d;
+always_ff @(posedge clk) begin
+    if (rst)
+        left_d <= 1'b0;
+    else
+        left_d <= left;
+end
+
+wire mouse_left_event = left & ~left_d; // impuls przy zboczu narastającym
 
     draw_bg u_draw_bg (
         .clk,
@@ -76,15 +86,16 @@ module top_vga (
         .vin(u_modules_mux_if),
         .rgb_out(rgb_out)
     );
-
+    wire logic mouse_left_game;
     game_fsm u_game_fsm
     (
         .clk,
         .rst,
         .mouse_left(mouse_left_event),
-        .collision(right),
+        .collision(collision),
         .state(state),
-        .game_rst(game_rst)
+        .game_rst(game_rst),
+        .mouse_left_game(mouse_left_game)
     );
 
     draw_start u_draw_start
@@ -103,8 +114,9 @@ module top_vga (
         .vin(u_timing_draw_if),
         .rgb(u_modules_mux_if.rgb_game),
         .valid(u_modules_mux_if.valid_game),
-        .mouse_left(mouse_left_event),
-        .game_rst(game_rst)
+        .mouse_left(mouse_left_game),
+        .game_rst(game_rst),
+        .collision(collision)
     );
         
         draw_gameover u_draw_gameover

@@ -5,15 +5,16 @@ module draw_game (
     input  logic        mouse_left,
     vga_if.in           vin,
     output logic [11:0] rgb,
-    output logic        valid
+    output logic        valid,
+    output logic collision
 );
 
     // -----------------------------
     // Parametry klocka
     // -----------------------------
     localparam BIRD_X      = 400;
-    localparam BIRD_WIDTH  = 200;
-    localparam BIRD_HEIGHT = 100;
+    localparam BIRD_WIDTH  = 40;
+    localparam BIRD_HEIGHT = 50;
 
     // -----------------------------
     // Pozycja ptaka z modułu bird_jump
@@ -24,8 +25,9 @@ module draw_game (
         .clk(clk),
         .rst(rst),
         .game_rst(game_rst),
-        .mouse_left(mouse_left),
-        .BIRD_Y(bird_y)
+        .mouse_left_game(mouse_left),
+        .BIRD_Y(bird_y),
+        .collision(collision)
     );
 
     // -----------------------------
