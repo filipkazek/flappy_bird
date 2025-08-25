@@ -43,6 +43,7 @@ set sv_files {
     ../rtl/draw_start.sv
     ../rtl/game_fsm.sv
     ../rtl/menu_mux.sv
+    ../rtl/tube_render.sv
     ../rtl/bird_jump.sv
     ../rtl/rgb_if.sv
     rtl/top_vga_basys3.sv

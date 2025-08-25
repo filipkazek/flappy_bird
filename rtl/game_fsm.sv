@@ -1,106 +1,70 @@
 module game_fsm
 (
-    input  wire  clk,             // posedge active clock
-    input  wire  rst,             // high-level active synchronous reset
-    input  wire  mouse_left,      // left mouse click
-    input  wire  collision,       // collision signal
-    output logic [1:0] state,     // encoded FSM state for outside world
-    output logic       game_rst,  // synchronous reset for game logic
-    output logic       mouse_left_game // impuls kliku tylko w stanie GAME
+    input  logic clk,             // posedge active clock
+    input  logic rst,             // synchroniczny reset
+    input  logic mouse_left,      // impuls lewego kliku (zsynchronizowany do clk)
+    input  logic collision,       // kolizja z rurą/ziemią
+    output logic [1:0] state,     // aktualny stan FSM
+    output logic game_rst,        // 1-cyklowy impuls resetu gry
+    output logic mouse_left_game  // 1-cyklowy impuls kliknięcia w stanie GAME
 );
 
-//------------------------------------------------------------------------------
-// local parameters
-//------------------------------------------------------------------------------
-localparam STATE_BITS = 2; // liczba bitów do reprezentacji stanu
+    // -----------------------------
+    // Stany
+    // -----------------------------
+    enum logic [1:0] {
+        START    = 2'b00,
+        GAME     = 2'b01,
+        GAMEOVER = 2'b10
+    } current_state, next_state;
 
-//------------------------------------------------------------------------------
-// lokalne zmienne
-//------------------------------------------------------------------------------
-enum logic [STATE_BITS-1:0] {
-    START    = 2'b00,
-    GAME     = 2'b01,
-    GAMEOVER = 2'b10
-} current_state;
-
-//------------------------------------------------------------------------------
-// detektor zbocza dla mouse_left
-//------------------------------------------------------------------------------
-logic mouse_left_d;        // poprzedni stan przycisku
-logic mouse_left_pulse;    // pojedynczy impuls
-
-always_ff @(posedge clk) begin
-    if (rst)
-        mouse_left_d <= 1'b0;
-    else
-        mouse_left_d <= mouse_left;
-end
-
-assign mouse_left_pulse = mouse_left & ~mouse_left_d;
-
-//------------------------------------------------------------------------------
-// FSM sekwencyjny z synchronicznym resetem
-//------------------------------------------------------------------------------
-always_ff @(posedge clk) begin
-    if (rst) begin
-        current_state     <= START;
-        state             <= START;
-        game_rst          <= 1'b0;
-        mouse_left_game   <= 1'b0;
+    // -----------------------------
+    // Rejestr stanu
+    // -----------------------------
+    always_ff @(posedge clk) begin
+        if (rst)
+            current_state <= START;
+        else
+            current_state <= next_state;
     end
-    else begin
-        // domyślnie brak impulsu dla bird_jump
-        mouse_left_game <= 1'b0;
+
+    // -----------------------------
+    // Logika przejść
+    // -----------------------------
+    always_comb begin
+        next_state      = current_state;
+        game_rst        = 1'b0;
+        mouse_left_game = 1'b0;
+        state           = current_state;
 
         case (current_state)
             START: begin
-                game_rst <= 1'b0;
-                if (mouse_left_pulse) begin
-                    current_state <= GAME;
-                    state         <= GAME;
-                    mouse_left_game <= 1'b1; // pierwsze kliknięcie aktywuje ptaka
-                end
-                else begin
-                    current_state <= START;
-                    state         <= START;
+                if (mouse_left) begin
+                    // start gry + aktywacja ptaka
+                    next_state      = GAME;
+                    mouse_left_game = 1'b1;
                 end
             end
 
             GAME: begin
-                game_rst <= 1'b0;
                 if (collision) begin
-                    current_state <= GAMEOVER;
-                    state         <= GAMEOVER;
-                end
-                else begin
-                    current_state   <= GAME;
-                    state           <= GAME;
-                    // w stanie GAME przekazujemy impuls do ptaka
-                    if (mouse_left_pulse)
-                        mouse_left_game <= 1'b1;
+                    next_state = GAMEOVER;
+                end else if (mouse_left) begin
+                    mouse_left_game = 1'b1;
                 end
             end
 
             GAMEOVER: begin
-                game_rst <= 1'b1; // reset gry
-                if (mouse_left_pulse) begin
-                    current_state <= START;
-                    state         <= START;
-                end
-                else begin
-                    current_state <= GAMEOVER;
-                    state         <= GAMEOVER;
+                if (mouse_left) begin
+                    next_state = START;
+                    game_rst   = 1'b1; // impuls tylko w cyklu powrotu
                 end
             end
 
             default: begin
-                current_state   <= START;
-                state           <= START;
-                game_rst        <= 1'b0;
-                mouse_left_game <= 1'b0;
+                next_state = START;
             end
         endcase
     end
-end
 
 endmodule

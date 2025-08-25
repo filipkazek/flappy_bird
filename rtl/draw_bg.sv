@@ -4,7 +4,7 @@
  * Author: Piotr Kaczmarczyk
  *
  * Description:
- * Draw background.
+ * Draw background (DEBUG version – flat gray).
  */
 
 module draw_bg (
@@ -19,52 +19,34 @@ module draw_bg (
 
     import vga_pkg::*;
 
-
-    /**
-     * Local variables and signals
-     */
-
     logic [11:0] rgb_nxt;
 
-
-    /**
-     * Internal logic
-     */
-
-
-    always_ff @(posedge clk) begin : bg_ff_blk
+    always_ff @(posedge clk) begin
         if (rst) begin
             vout.vcount <= '0;
             vout.vsync  <= '0;
-            vout.vblnk <= '0;
+            vout.vblnk  <= '0;
             vout.hcount <= '0;
-            vout.hsync <= '0;
+            vout.hsync  <= '0;
             vout.hblnk  <= '0;
             vout.rgb    <= '0;
         end else begin
             vout.vcount <= vin.vcount;
-            vout.vsync <= vin.vsync;
-            vout.vblnk <= vin.vblnk;
+            vout.vsync  <= vin.vsync;
+            vout.vblnk  <= vin.vblnk;
             vout.hcount <= vin.hcount;
-            vout.hsync <= vin.hsync;
-            vout.hblnk <= vin.hblnk;
-            vout.rgb   <= rgb_nxt;
+            vout.hsync  <= vin.hsync;
+            vout.hblnk  <= vin.hblnk;
+            vout.rgb    <= rgb_nxt;
         end
     end
 
-    always_comb begin : bg_comb_blk
-        
-        if (vin.vblnk || vin.hblnk) begin             // Blanking region:
-            rgb_nxt = 12'h0_0_0;                    // - make it it black.
-        end else if (vin.vcount > 700) begin                              // Active region:
-            rgb_nxt = 12'hA52;                // - fill with gray.
-            end else if (vin.vcount <= 700 && vin.vcount > 675 ) begin                              // Active region:
-            rgb_nxt = 12'h0F0;                // - fill with gray.
-            end
-            else begin
-                rgb_nxt = 12'h5_5_F;                // - fill with white.
+    always_comb begin
+        if (vin.vblnk || vin.hblnk) begin
+            rgb_nxt = 12'h000;      // black during blanking
+        end else begin
+            rgb_nxt = 12'h777;      // flat gray everywhere
         end
     end
-
 
 endmodule

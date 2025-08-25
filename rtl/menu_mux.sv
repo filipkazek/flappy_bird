@@ -1,7 +1,7 @@
 module menu_mux (
     input  logic        clk,
-    input  logic        rst,          // synchroniczny reset
-    input  logic [1:0]  state,        // od FSM
+    input  logic        rst,
+    input  logic [1:0]  state,
     input  logic [11:0] rgb_bg,
     rgb_if.in           vin,
     output logic [11:0] rgb_out
@@ -9,23 +9,18 @@ module menu_mux (
 
     logic [11:0] rgb_next;
 
-    // combinational logic – wybór, co idzie dalej
     always_comb begin
+        rgb_next = rgb_bg;
         case (state)
-            2'b00: rgb_next = vin.valid_start    ? vin.rgb_start    : rgb_bg;
-            2'b01: rgb_next = vin.valid_game     ? vin.rgb_game     : rgb_bg;
-            2'b10: rgb_next = vin.valid_gameover ? vin.rgb_gameover : rgb_bg;
-            default: rgb_next = rgb_bg;
+            2'b00: if (vin.valid_start)    rgb_next = vin.rgb_start; 
+            2'b01: if (vin.valid_game)     rgb_next = vin.rgb_game; 
+            2'b10: if (vin.valid_gameover) rgb_next = vin.rgb_gameover;
         endcase
     end
 
-    // registered output z synchronicznym resetem
     always_ff @(posedge clk) begin
-        if (rst) begin
-            rgb_out <= rgb_bg;   
-        end else begin
-            rgb_out <= rgb_next;
-        end
+        if (rst) rgb_out <= rgb_bg;
+        else     rgb_out <= rgb_next;
     end
 
 endmodule
