@@ -14,10 +14,10 @@ module draw_start (
         else begin
             if (vin.hcount >= 400 && vin.hcount < 600 &&
                 vin.vcount >= 300 && vin.vcount < 400) begin
-                rgb   <= 12'hF00;  // czerwony
-                valid <= 1'b1;     // rysujemy piksel
+                rgb   <= 12'hF00; 
+                valid <= 1'b1;    
             end else begin
-                rgb   <= 12'h000;  // nie rysujemy
+                rgb   <= 12'h000;  
                 valid <= 1'b0;
             end
         end

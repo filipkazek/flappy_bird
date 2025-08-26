@@ -29,9 +29,7 @@ module top_vga (
         .vout(u_timing_draw_if)
     );
 
-    // -----------------------------------
-    // Mouse input
-    // -----------------------------------
+ 
     wire logic left;
     wire logic right;
     wire logic collision;
@@ -47,7 +45,7 @@ module top_vga (
         .new_event(new_event)
     );
 
-    // --- synchronizator na clk (domena gry/VGA) ---
+  
     logic left_meta, left_sync, left_d;
 
     always_ff @(posedge clk) begin
@@ -56,17 +54,15 @@ module top_vga (
             left_sync <= 0;
             left_d    <= 0;
         end else begin
-            left_meta <= left;        // 1. flop
-            left_sync <= left_meta;   // 2. flop
-            left_d    <= left_sync;   // zapamiętaj do detektora
+            left_meta <= left;       
+            left_sync <= left_meta;  
+            left_d    <= left_sync;  
         end
     end
 
-    wire mouse_left_event = left_sync & ~left_d; // impuls w domenie clk
+    wire mouse_left_event = left_sync & ~left_d; 
 
-    // -----------------------------------
-    // Tło
-    // -----------------------------------
+  
     draw_bg u_draw_bg (
         .clk,
         .rst,
@@ -74,9 +70,6 @@ module top_vga (
         .vout(u_draw_out_if)
     );
 
-    // -----------------------------------
-    // FSM + MUX
-    // -----------------------------------
     wire logic [1:0] state;
     rgb_if u_modules_mux_if();
     wire logic game_rst;
@@ -100,9 +93,7 @@ module top_vga (
         .mouse_left_game(mouse_left_game)
     );
 
-    // -----------------------------------
-    // Ekrany
-    // -----------------------------------
+
     draw_start u_draw_start (
         .clk,
         .rst,
