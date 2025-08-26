@@ -34,11 +34,11 @@ module game_fsm
         case (current_state)
             START: begin
                 if (mouse_left) begin
-                   
                     next_state      = GAME;
                     mouse_left_game = 1'b1;
-                end
+                game_rst        = 1'b1;  // <<< wymuszamy reset tub na starcie
             end
+         end
 
             GAME: begin
                 if (collision) begin
