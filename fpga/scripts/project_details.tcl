@@ -45,7 +45,10 @@ set sv_files {
     ../rtl/menu_mux.sv
     ../rtl/tube_render.sv
     ../rtl/bird_jump.sv
+    ../rtl/image_rom.sv
+    ../rtl/start_rom.sv
     ../rtl/rgb_if.sv
+    ../rtl/uart_click_rx.sv
     rtl/top_vga_basys3.sv
 }
 
@@ -53,6 +56,7 @@ set sv_files {
  set verilog_files {
    ../fpga/rtl/clk_wiz_0.v
    ../fpga/rtl/clk_wiz_0_clk_wiz.v
+   ../rtl/simple_uart_rx.v
  }
 
 # Specify VHDL design files location            -- EDIT
@@ -62,6 +66,7 @@ set sv_files {
  }
 
 # Specify files for a memory initialization     -- EDIT
-# set mem_files {
-#    path/to/file.data
-# }
+ set mem_files {
+    ../rtl/bg.dat
+    ../rtl/start.dat
+ }

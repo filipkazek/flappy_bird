@@ -19,6 +19,8 @@ sv work ../../rtl/vga_pkg.sv \
         ../../rtl/game_fsm.sv \
         ../../rtl/menu_mux.sv \
         ../../rtl/draw_game.sv \
+        ../../rtl/image_rom.sv \
+        ../../rtl/tube_render.sv \
         ../../rtl/bird_jump.sv \
         ../../rtl/draw_gameover.sv \
         ../common/tiff_writer.sv \

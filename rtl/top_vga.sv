@@ -8,7 +8,8 @@ module top_vga (
         output logic [3:0] g,
         output logic [3:0] b,
         inout  logic ps2_clk,
-        inout  logic ps2_data
+        inout  logic ps2_data,
+        input logic JB0
     );
 
     timeunit 1ns;
@@ -62,6 +63,43 @@ module top_vga (
 
     wire mouse_left_event = left_sync & ~left_d; 
 
+    // --- [1] SYNC + EDGE dla zdalnego kliknięcia (UART) ---
+logic remote_meta, remote_sync, remote_d;
+   logic remote_click_pulse;
+// synchronizacja do clk
+always_ff @(posedge clk or posedge rst) begin
+    if (rst) begin
+        remote_meta <= 1'b0;
+        remote_sync <= 1'b0;
+        remote_d    <= 1'b0;
+    end else begin
+        remote_meta <= remote_click_pulse;  // z modułu UART
+        remote_sync <= remote_meta;
+        remote_d    <= remote_sync;
+    end
+end
+
+// wykrycie zbocza narastającego (impuls 1-taktowy)
+wire remote_click_event = remote_sync & ~remote_d;
+
+
+    
+ 
+
+    uart_click_rx #(
+    .CLK_FREQ(65_000_000),
+    .BAUD(115_200)
+        ) u_remote (
+         .clk   (clk),
+        .rst   (rst),
+        .rx_in (JB0),            
+        .click_pulse(remote_click_pulse)
+    );
+
+
+    
+
+
   
     draw_bg u_draw_bg (
         .clk,
@@ -86,7 +124,7 @@ module top_vga (
     game_fsm u_game_fsm (
         .clk,
         .rst,
-        .mouse_left(mouse_left_event),
+        .mouse_left(remote_click_event),
         .collision(collision),
         .state(state),
         .game_rst(game_rst),
