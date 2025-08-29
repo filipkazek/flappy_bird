@@ -47,6 +47,7 @@ set sv_files {
     ../rtl/bird_jump.sv
     ../rtl/image_rom.sv
     ../rtl/start_rom.sv
+    ../rtl/gameover_rom.sv
     ../rtl/rgb_if.sv
     ../rtl/uart_click_rx.sv
     rtl/top_vga_basys3.sv
@@ -69,4 +70,7 @@ set sv_files {
  set mem_files {
     ../rtl/bg.dat
     ../rtl/start.dat
+    ../rtl/player1.dat
+    ../rtl/player2.dat
+    ../rtl/draw.dat
  }

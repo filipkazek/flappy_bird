@@ -1,5 +1,4 @@
-// uart_click_rx.sv
-// Wrapper nad simple_uart_rx: generuje impuls 1-taktowy przy odebraniu ASCII '1' (0x31).
+
 
 module uart_click_rx #(
     parameter int CLK_FREQ = 65_000_000,
@@ -7,8 +6,8 @@ module uart_click_rx #(
 )(
     input  logic clk,
     input  logic rst,
-    input  logic rx_in,          // we/ UART RX (z PMOD lub USB-UART)
-    output logic click_pulse     // impuls 1-taktowy gdy przyjdzie '1'
+    input  logic rx_in,          
+    output logic click_pulse     
 );
 
     logic [7:0] rx_data;
@@ -29,7 +28,7 @@ module uart_click_rx #(
         if (rst) begin
             click_pulse <= 1'b0;
         end else begin
-            // 1 takt '1' jeśli odebrano bajt 0x31
+           
             click_pulse <= (rx_valid && (rx_data == 8'h31));
         end
     end

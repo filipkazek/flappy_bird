@@ -33,7 +33,8 @@ module top_vga (
  
     wire logic left;
     wire logic right;
-    wire logic collision;
+    wire logic collision_p1;
+    wire logic collision_p2;
     wire logic new_event;
 
     MouseCtl u_mouse_ctl (
@@ -111,7 +112,8 @@ wire remote_click_event = remote_sync & ~remote_d;
     wire logic [1:0] state;
     rgb_if u_modules_mux_if();
     wire logic game_rst;
-    wire logic mouse_left_game;
+    wire logic mouse_left_game_local;
+    wire logic mouse_left_game_remote;
 
     menu_mux u_menu_mux (
         .clk,
@@ -120,15 +122,21 @@ wire remote_click_event = remote_sync & ~remote_d;
         .vin(u_modules_mux_if),
         .rgb_out(rgb_out)
     );
-
+    wire logic winner_valid;
+    wire logic [1:0] winner_code;
+    wire logic [1:0] winner_latched;
     game_fsm u_game_fsm (
         .clk,
         .rst,
-        .mouse_left(remote_click_event),
-        .collision(collision),
+        .mouse_left_remote(remote_click_event),
+        .mouse_left_local(mouse_left_event),
         .state(state),
         .game_rst(game_rst),
-        .mouse_left_game(mouse_left_game)
+        .mouse_left_game_local(mouse_left_game_local),
+        .mouse_left_game_remote(mouse_left_game_remote),
+        .winner_code(winner_code),
+        .winner_valid(winner_valid),
+        .winner_latched(winner_latched)
     );
 
 
@@ -146,9 +154,11 @@ wire remote_click_event = remote_sync & ~remote_d;
         .vin(u_timing_draw_if),
         .rgb(u_modules_mux_if.rgb_game),
         .valid(u_modules_mux_if.valid_game),
-        .mouse_left(mouse_left_game),
+        .mouse_left_local(mouse_left_game_local),
+        .mouse_left_remote(mouse_left_game_remote),
         .game_rst(game_rst),
-        .collision(collision)
+        .winner_valid(winner_valid),
+        .winner_code(winner_code)
     );
 
     draw_gameover u_draw_gameover (
@@ -156,7 +166,8 @@ wire remote_click_event = remote_sync & ~remote_d;
         .rst,
         .vin(u_timing_draw_if),
         .rgb(u_modules_mux_if.rgb_gameover),
-        .valid(u_modules_mux_if.valid_gameover)
+        .valid(u_modules_mux_if.valid_gameover),
+        .winner_latched(winner_latched)
     );
 
 endmodule

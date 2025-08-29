@@ -13,10 +13,10 @@ module bird_jump (
     localparam START_Y       = 300;
 
     localparam signed GRAVITY       = 1;    
-    localparam signed JUMP_VELOCITY = -17;   
+    localparam signed JUMP_VELOCITY = -15;   
 
    
-    localparam integer TICK_MAX = 900_000; 
+    localparam integer TICK_MAX = 800_000; 
 
    
     logic signed [10:0] velocity;

@@ -7,7 +7,7 @@ module image_rom #(
     output logic [11:0] rgb_pixel
 );
 
-    // pamięć ROM
+   
     logic [11:0] rom [0:WIDTH*HEIGHT-1];
 
     initial begin
