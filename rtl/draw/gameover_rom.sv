@@ -1,3 +1,10 @@
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek, Mikołaj Twaróg
+ */
 module gameover_rom (
     input  logic        clk,
     
@@ -18,9 +25,9 @@ module gameover_rom (
     (* rom_style = "distributed" *) logic [11:0] rom_dr [0:DEPTH_DR-1];
 
     initial begin
-        $readmemh("player1.dat", rom_p1);
-        $readmemh("player2.dat", rom_p2);
-        $readmemh("draw.dat",    rom_dr);
+        $readmemh("data/player1.dat", rom_p1);
+        $readmemh("data/player2.dat", rom_p2);
+        $readmemh("data/draw.dat",    rom_dr);
     end
 
     always_ff @(posedge clk) begin

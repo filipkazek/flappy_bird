@@ -1,3 +1,10 @@
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek
+ */
 interface rgb_if();
     logic [11:0] rgb_start;
     logic [11:0] rgb_game;

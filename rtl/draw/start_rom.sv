@@ -1,3 +1,10 @@
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek
+ */
 module start_rom(
     input  logic        clk,
     input  logic [14:0] addr,      
@@ -13,7 +20,7 @@ module start_rom(
 
     initial begin
         
-        $readmemh("start.dat", rom);
+        $readmemh("data/start.dat", rom);
     end
 
    

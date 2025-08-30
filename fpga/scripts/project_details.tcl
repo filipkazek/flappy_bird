@@ -33,23 +33,26 @@ set xdc_files {
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
-    ../rtl/vga_pkg.sv
-    ../rtl/vga_timing.sv
-    ../rtl/draw_bg.sv
+    ../rtl/vga/vga_pkg.sv
+    ../rtl/vga/vga_timing.sv
+    ../rtl/draw/draw_bg.sv
     ../rtl/top_vga.sv
-    ../rtl/vga_if.sv
-    ../rtl/draw_game.sv
-    ../rtl/draw_gameover.sv
-    ../rtl/draw_start.sv
-    ../rtl/game_fsm.sv
-    ../rtl/menu_mux.sv
-    ../rtl/tube_render.sv
-    ../rtl/bird_jump.sv
-    ../rtl/image_rom.sv
-    ../rtl/start_rom.sv
-    ../rtl/gameover_rom.sv
-    ../rtl/rgb_if.sv
-    ../rtl/uart_click_rx.sv
+    ../rtl/mouse_sync.sv
+    ../rtl/vga/vga_if.sv
+    ../rtl/draw/draw_game.sv
+    ../rtl/draw/draw_gameover.sv
+    ../rtl/draw/draw_start.sv
+    ../rtl/game/game_fsm.sv
+    ../rtl/game/game_logic.sv
+    ../rtl/draw/menu_mux.sv
+    ../rtl/game/tube_render.sv
+    ../rtl/game/bird_jump.sv
+    ../rtl/draw/bg_rom.sv
+    ../rtl/draw/menu_sel.sv
+    ../rtl/draw/start_rom.sv
+    ../rtl/draw/gameover_rom.sv
+    ../rtl/draw/rgb_if.sv
+    ../rtl/uart/uart_click_rx.sv
     rtl/top_vga_basys3.sv
 }
 
@@ -57,7 +60,7 @@ set sv_files {
  set verilog_files {
    ../fpga/rtl/clk_wiz_0.v
    ../fpga/rtl/clk_wiz_0_clk_wiz.v
-   ../rtl/simple_uart_rx.v
+   ../rtl/uart/simple_uart_rx.v
  }
 
 # Specify VHDL design files location            -- EDIT
@@ -68,9 +71,9 @@ set sv_files {
 
 # Specify files for a memory initialization     -- EDIT
  set mem_files {
-    ../rtl/bg.dat
-    ../rtl/start.dat
-    ../rtl/player1.dat
-    ../rtl/player2.dat
-    ../rtl/draw.dat
+    ../rtl/draw/data/bg.dat
+    ../rtl/draw/data/start.dat
+    ../rtl/draw/data/player1.dat
+    ../rtl/draw/data/player2.dat
+    ../rtl/draw/data/draw.dat
  }

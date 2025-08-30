@@ -1,3 +1,12 @@
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek, Mikołaj Twaróg
+ */
+
+
 module bird_jump (
     input  logic clk,
     input  logic rst,

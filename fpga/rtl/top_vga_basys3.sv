@@ -1,17 +1,10 @@
 /**
- * San Jose State University
- * EE178 Lab #4
- * Author: prof. Eric Crabilla
- *
- * Modified by:
  * 2025  AGH University of Science and Technology
  * MTM UEC2
- * Piotr Kaczmarczyk
+ * Flappy Bird - UEC2 Final Project
  *
- * Description:
- * Top level synthesizable module including the project top and all the FPGA-referred modules.
+ *  Filip Kazek
  */
-
 module top_vga_basys3 (
         input  wire clk,
         input  wire btnC,
@@ -33,7 +26,6 @@ module top_vga_basys3 (
      * Local variables and signals
      */
 
-    wire locked;
     wire clk100MHz;
     wire clk65MHz;
     wire pclk_mirror;
@@ -43,7 +35,7 @@ module top_vga_basys3 (
         .clk(clk),
         .clk100MHz(clk100MHz),
         .clk65MHz(clk65MHz),
-        .locked(locked)
+        .locked()
     );
 
     (* KEEP = "TRUE" *)
