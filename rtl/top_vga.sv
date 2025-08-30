@@ -43,7 +43,7 @@ module top_vga (
     wire logic right;
 
     MouseCtl u_mouse_ctl (
-        .clk      (clk100MHz),
+        .clk      (clk),
         .rst      (rst),
         .ps2_clk  (ps2_clk),
         .ps2_data (ps2_data),
@@ -155,6 +155,8 @@ module top_vga (
 
   
     draw_game u_draw_game (
+        .clk,
+        .rst,
         .vin          (u_timing_draw_if),
         .tube_x       (tube_x),
         .gap_y        (gap_y),

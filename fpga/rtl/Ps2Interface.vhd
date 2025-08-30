@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------
 -- ps2interface.vhd
 ------------------------------------------------------------------------
--- Author : Ulrich Zolt�n
+-- Author : Ulrich Zolt�n
 --          Copyright 2006 Digilent, Inc.
 ------------------------------------------------------------------------
 -- This file contains the implementation of a generic bidirectional
@@ -180,31 +180,26 @@ end Ps2Interface;
 architecture Behavioral of Ps2Interface is
 
 ------------------------------------------------------------------------
--- CONSTANTS
+-- CONSTANTS (dla clk = 65 MHz)
 ------------------------------------------------------------------------
 
--- Values are valid for a 100MHz clk. Please adjust for other
--- frequencies if necessary!
+-- 100 us = 100e-6 * 65e6 = 6500 taktów @65 MHz
+-- 6500 = 0b 0110_0101_1001_00 (14 bitów)
+constant DELAY_100US : std_logic_vector(13 downto 0) := "01100101100100";
 
--- upper limit for 100us delay counter.
--- 10000 * 10ns = 100us
-constant DELAY_100US : std_logic_vector(13 downto 0):= "10011100010000";
-                                                 -- 10000 clock periods
--- upper limit for 20us delay counter.
--- 2000 * 10ns = 20us
-constant DELAY_20US  : std_logic_vector(10 downto 0) := "11111010000";
-                                                  -- 2000 clock periods
--- upper limit for 63clk delay counter.
+-- 20 us = 20e-6 * 65e6 = 1300 taktów @65 MHz
+-- 1300 = 0b 101_0001_0100 (11 bitów)
+constant DELAY_20US  : std_logic_vector(10 downto 0) := "10100010100";
+
+-- 63 cykle zegara – bez zmian
 constant DELAY_63CLK : std_logic_vector(6 downto 0)  := "1111111";
-                                                    -- 63 clock periods
--- delay from debouncing ps2_clk and ps2_data signals
-constant DEBOUNCE_DELAY : std_logic_vector(3 downto 0)  := "1111";
 
--- number of bits in a frame
-constant NUMBITS: std_logic_vector(3 downto 0) := "1011"; -- 11
+-- debouncing – bez zmian
+constant DEBOUNCE_DELAY : std_logic_vector(3 downto 0) := "1111";
 
--- parity bit position in frame
-constant PARITY_BIT: positive := 9;
+-- liczba bitów w ramce – bez zmian
+constant NUMBITS    : std_logic_vector(3 downto 0) := "1011"; -- 11
+constant PARITY_BIT : positive := 9;
 
 -- (odd) parity bit ROM
 -- Used instead of logic because this way speed is far greater

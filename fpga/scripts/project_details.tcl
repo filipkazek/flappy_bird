@@ -52,6 +52,8 @@ set sv_files {
     ../rtl/draw/start_rom.sv
     ../rtl/draw/gameover_rom.sv
     ../rtl/draw/rgb_if.sv
+    ../rtl/draw/bird_rom.sv
+    ../rtl/draw/bg_rom.sv
     ../rtl/uart/uart_click_rx.sv
     rtl/top_vga_basys3.sv
 }
@@ -76,4 +78,6 @@ set sv_files {
     ../rtl/draw/data/player1.dat
     ../rtl/draw/data/player2.dat
     ../rtl/draw/data/draw.dat
+    ../rtl/draw/data/p1.dat
+    ../rtl/draw/data/p2.dat
  }
