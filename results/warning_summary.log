@@ -1,0 +1,27 @@
+Warnings, critical warnings and errors from synthesis and implementation
+
+Created: 2025-08-31 14:52:06
+
+----SYNTHESIS----
+WARNING: [Synth 8-7129] Port vin\.vsync in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vblnk in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hblnk in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vsync in module bird_rom__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module bird_rom__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vsync in module bird_rom is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module bird_rom is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vsync in module draw_start is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module draw_start is either unconnected or has no load
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-7129] Port vin\.vsync in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vblnk in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hblnk in module draw_gameover is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vsync in module draw_game is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module draw_game is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.vsync in module draw_start is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vin\.hsync in module draw_start is either unconnected or has no load
+
+----IMPLEMENTATION----
+WARNING: [Power 33-332] Found switching activity that implies high-fanout reset nets being asserted for excessive periods of time which may result in inaccurate power analysis.

@@ -1,3 +1,10 @@
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek
+ */
 module game_fsm
 (
     input  logic clk,

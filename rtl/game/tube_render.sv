@@ -1,3 +1,10 @@
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek
+ */
 module tube_render #(
     parameter int SCREEN_WIDTH  = 1024,
     parameter int SCREEN_HEIGHT = 768,

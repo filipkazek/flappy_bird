@@ -80,7 +80,6 @@ module top_vga_basys3 (
         .ps2_clk(PS2Clk),
         .ps2_data(PS2Data),
         .clk(clk65MHz),
-        .clk100MHz(clk100MHz),
         .rst(btnC),
         .r(vgaRed),
         .g(vgaGreen),

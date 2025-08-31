@@ -3,7 +3,7 @@
  * MTM UEC2
  * Flappy Bird - UEC2 Final Project
  *
- *  Filip Kazek, Mikołaj Twaróg
+ *  Filip Kazek
  */
 module gameover_rom (
     input  logic        clk,

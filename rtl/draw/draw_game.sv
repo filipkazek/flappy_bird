@@ -1,4 +1,10 @@
-
+/**
+ * 2025  AGH University of Science and Technology
+ * MTM UEC2
+ * Flappy Bird - UEC2 Final Project
+ *
+ *  Filip Kazek
+ */
 module draw_game #(
 
     parameter int    BIRD_WIDTH   = 40,
@@ -26,8 +32,8 @@ module draw_game #(
     localparam int SCREEN_W   = 1024;
     localparam int TUBE_WIDTH = 120;
     localparam int GAP_HEIGHT = 250;
-    localparam int BIRD1_X    = 180;
-    localparam int BIRD2_X    = 260;
+    localparam logic [10:0] BIRD1_X    = 180;
+    localparam logic [10:0] BIRD2_X    = 260;
 
     logic [11:0] rgb_tube;
     logic        valid_tube;
